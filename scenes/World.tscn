@@ -1,21 +1,41 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scripts/World.cs" type="Script" id=1]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/TileMap.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/tilemap/_Complete_static_BG_(288 x 208).png" type="Texture" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 158, 7 )
+extents = Vector2( 261, 10 )
 
 [node name="World" type="Node2D"]
 script = ExtResource( 1 )
 
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 0
+
+[node name="Sprite" type="Sprite" parent="CanvasLayer"]
+texture = ExtResource( 4 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 320, 180 )
+
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 73, 15 )
+position = Vector2( 160, 90 )
+gravity = 600
 speed = 70
 jumpForce = 150
 
-[node name="DummyGround" type="StaticBody2D" parent="."]
-position = Vector2( 30, 89 )
+[node name="TileMap" parent="." instance=ExtResource( 3 )]
+tile_data = PoolIntArray( 589838, 0, 131072, 589839, 0, 3, 589840, 0, 131077, 589841, 0, 131078, 720895, 0, 131072, 655360, 0, 131077, 655361, 0, 131073, 655362, 0, 3, 655363, 0, 3, 655364, 0, 4, 655367, 0, 2, 655368, 0, 3, 655369, 0, 131077, 655370, 0, 3, 655371, 0, 131073, 655372, 0, 3, 655373, 0, 131073, 655374, 0, 131074, 655375, 0, 196611, 655376, 0, 196611, 655377, 0, 131076, 655378, 0, 3, 655379, 0, 131073, 655380, 0, 4, 786431, 0, 327682, 720896, 0, 327683, 720897, 0, 196613, 720898, 0, 196613, 720899, 0, 196609, 720900, 0, 327684, 720903, 0, 196608, 720904, 0, 196609, 720905, 0, 327683, 720906, 0, 196609, 720907, 0, 196613, 720908, 0, 196613, 720909, 0, 327683, 720910, 0, 196609, 720911, 0, 196613, 720912, 0, 327683, 720913, 0, 196613, 720914, 0, 196613, 720915, 0, 327683, 720916, 0, 196614 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DummyGround"]
+[node name="DeadZone" type="Area2D" parent="."]
+position = Vector2( 160, 220 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DeadZone"]
 shape = SubResource( 1 )
+
+[node name="StartPosition" type="Position2D" parent="."]
+position = Vector2( 160, 90 )
+
+[connection signal="body_entered" from="DeadZone" to="." method="_on_DeadZone_body_entered"]

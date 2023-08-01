@@ -3,19 +3,27 @@ using System;
 
 public class World : Node2D
 {
-    // Declare member variables here. Examples:
-    // private int a = 2;
-    // private string b = "text";
 
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
-    {
-        
-    }
+	// Export variables
+	
+	// Node Variables
+	private KinematicBody2D player;
+	private Position2D startPosition;
+	
+	// Normal Variables
 
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
+	public override void _Ready()
+	{
+		player = GetNode<KinematicBody2D>("Player");
+		startPosition = GetNode<Position2D>("StartPosition");
+	}
+	
+	private void _on_DeadZone_body_entered(Node body) 
+	{
+		if (body is Player player) 
+		{
+			player.GlobalPosition = startPosition.GlobalPosition;
+		}
+	}
+
 }
