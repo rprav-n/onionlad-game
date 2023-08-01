@@ -67,5 +67,4 @@ position = Vector2( 0, 2 )
 shape = SubResource( 7 )
 
 [node name="Gun" parent="." instance=ExtResource( 4 )]
-visible = false
 position = Vector2( 20, 0 )

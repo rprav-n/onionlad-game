@@ -17,25 +17,26 @@ public class Player : KinematicBody2D
 	
 	// Node Variables
 	private AnimatedSprite animatedSprite;
-	private Node2D gun;
+	private Gun gun;
 	
 	// Normal Variables
 	private Vector2 velocity = Vector2.Zero;
 	private float direction = 0f;
+	private const int playerGunGap = 20;
 
 	public override void _Ready()
 	{
 		base._Ready();
 		
 		animatedSprite = GetNode<AnimatedSprite>("AnimatedSprite");
-		gun = GetNode<Node2D>("Gun");
+		gun = GetNode<Gun>("Gun");
 	}
 
 	public override void _PhysicsProcess(float delta)
 	{
 		playerGravity(delta);
 		playerMovement(delta);
-		playerMouseMovement();
+		playerGunMouseMovement();
 		playerAnimation();
 		
 		velocity = MoveAndSlide(velocity, Vector2.Up);
@@ -93,18 +94,18 @@ public class Player : KinematicBody2D
 		}
 	}
 
-	private void playerMouseMovement()
+	private void playerGunMouseMovement()
 	{
 		Vector2 mousePosition = GetGlobalMousePosition();
-
 		Vector2 playerPosition = GlobalPosition;
 
 		Vector2 direction = (mousePosition - playerPosition).Normalized();
 
-		Vector2 gunPosition = playerPosition + direction * 20;
-
+		Vector2 gunPosition = playerPosition + direction * playerGunGap;
 		gun.GlobalPosition = gunPosition;
-
+		
+		gun.FlipGun(mousePosition < playerPosition);
+		
 		gun.LookAt(mousePosition);
 	}
 
