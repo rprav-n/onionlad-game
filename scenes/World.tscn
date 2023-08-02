@@ -1,15 +1,20 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scripts/World.cs" type="Script" id=1]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/TileMap.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/tilemap/_Complete_static_BG_(288 x 208).png" type="Texture" id=4]
+[ext_resource path="res://scenes/Sushi.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/Sushi2.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/Sushi3.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenes/Explosion.tscn" type="PackedScene" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 261, 10 )
 
 [node name="World" type="Node2D"]
 script = ExtResource( 1 )
+enemies = [ ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ) ]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = -1
@@ -41,5 +46,21 @@ shape = SubResource( 1 )
 [node name="StartPosition" type="Position2D" parent="."]
 position = Vector2( 160, 90 )
 
+[node name="EnemySpawner" type="Node2D" parent="."]
+
+[node name="EnemyContainer" type="Node2D" parent="EnemySpawner"]
+
+[node name="Timer" type="Timer" parent="EnemySpawner"]
+wait_time = 2.0
+autostart = true
+
+[node name="Effects" type="Node2D" parent="."]
+
+[node name="Explosion" parent="Effects" instance=ExtResource( 8 )]
+visible = false
+
 [connection signal="shootBullet" from="Player" to="." method="_on_Player_shootBullet"]
+[connection signal="area_entered" from="DeadZone" to="." method="_on_DeadZone_area_entered"]
 [connection signal="body_entered" from="DeadZone" to="." method="_on_DeadZone_body_entered"]
+[connection signal="timeout" from="EnemySpawner/Timer" to="." method="_on_EnemySpawner_Timer_timeout"]
+[connection signal="animation_finished" from="Effects/Explosion" to="." method="_on_Explosion_animation_finished"]

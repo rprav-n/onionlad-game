@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scripts/Enemy.cs" type="Script" id=1]
+[ext_resource path="res://scenes/Explosion.tscn" type="PackedScene" id=2]
+
+[node name="Enemy" type="Area2D"]
+script = ExtResource( 1 )
+speed = 10
+
+[node name="Sprite" type="Sprite" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="Explosion" parent="." instance=ExtResource( 2 )]
+visible = false
+
+[connection signal="area_entered" from="." to="." method="_on_Enemy_area_entered"]
+[connection signal="animation_finished" from="Explosion" to="." method="_on_Explosion_animation_finished"]

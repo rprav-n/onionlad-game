@@ -19,5 +19,10 @@ public class Bullet : Area2D
 		var newPosition = -direction * speed * delta;
 		this.GlobalPosition += newPosition;
 	}
+	
+	private void _on_VisibleNotifier_screen_exited() 
+	{
+		this.QueueFree();
+	}
 
 }

@@ -1,16 +1,22 @@
+using System.Security;
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class World : Node2D
 {
 
 	// Export variables
+	[Export]
+	private List<PackedScene> enemies = new List<PackedScene>();
 	
 	// Node Variables
 	private KinematicBody2D player;
 	private Position2D startPosition;
 	private PackedScene BulletScene;
 	private Node2D bulletContainer;
+	private Node2D enemyContainer;
+	private AnimatedSprite explosion;
 	
 	// Normal Variables
 
@@ -20,6 +26,10 @@ public class World : Node2D
 		startPosition = GetNode<Position2D>("StartPosition");
 		BulletScene = GD.Load<PackedScene>("res://scenes/Bullet.tscn");
 		bulletContainer = GetNode<Node2D>("BulletContainer");
+		enemyContainer = GetNode<Node2D>("EnemySpawner/EnemyContainer");
+		explosion = GetNode<AnimatedSprite>("Effects/Explosion");
+		explosion.Visible = false;
+		explosion.Frame = 0;
 	}
 	
 	private void _on_DeadZone_body_entered(Node body) 
@@ -27,6 +37,14 @@ public class World : Node2D
 		if (body is Player player) 
 		{
 			player.GlobalPosition = startPosition.GlobalPosition;
+		}
+	}
+	
+	private void _on_DeadZone_area_entered(Area2D area) 
+	{
+		if (area is Enemy enemy) 
+		{
+			enemy.QueueFree();
 		}
 	}
 
@@ -44,4 +62,39 @@ public class World : Node2D
 		var bulletDirection = (gunPosition - lookAtPosition).Normalized();
 		newBullet.direction = bulletDirection;
 	}
+	
+	public void _on_EnemySpawner_Timer_timeout() 
+	{
+		Random rand = new Random();
+		var randomEnemyIndex = rand.Next(0, enemies.Count);
+		
+		var EnemyScene = enemies[randomEnemyIndex];
+		
+		var enemy = EnemyScene.Instance<Enemy>();
+		var randomEnemyXPosition = getRadomValueFromTotalScreenWidth();
+		enemy.GlobalPosition = new Vector2(randomEnemyXPosition, 0);
+		enemyContainer.AddChild(enemy);
+		enemy.Connect("enemyDied", this, "_on_Sushi_enemyDied");
+	}
+	
+	private int getRadomValueFromTotalScreenWidth() 
+	{
+		Random rand = new Random();
+		var screenSize = GetViewportRect().Size;
+		return rand.Next(10, (int)screenSize.x - 10);
+	}
+	
+	private void _on_Sushi_enemyDied(Vector2 enemyDiedPosition) 
+	{
+		explosion.GlobalPosition = enemyDiedPosition;
+		explosion.Visible = true;
+		explosion.Play("poof");
+	}
+	
+	private void _on_Explosion_animation_finished() 
+	{
+		explosion.Visible = false;
+		explosion.Stop();
+	}
+
 }
