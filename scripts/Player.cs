@@ -4,6 +4,8 @@ using System;
 public class Player : KinematicBody2D
 {
 	// Signals
+	[Signal]
+	private delegate void shootBullet(Vector2 gunPosition, Vector2 lookAtPosition);
 	
 	// Export variables
 	[Export]
@@ -38,6 +40,7 @@ public class Player : KinematicBody2D
 		playerMovement(delta);
 		playerGunMouseMovement();
 		playerAnimation();
+		playerShoot();
 		
 		velocity = MoveAndSlide(velocity, Vector2.Up);
 	}
@@ -107,6 +110,14 @@ public class Player : KinematicBody2D
 		gun.FlipGun(mousePosition < playerPosition);
 		
 		gun.LookAt(mousePosition);
+	}
+
+	public void playerShoot() 
+	{
+		if (Input.IsActionJustPressed("shoot")) 
+		{
+			this.EmitSignal("shootBullet", gun.GlobalPosition, GetGlobalMousePosition());
+		}
 	}
 
 }
