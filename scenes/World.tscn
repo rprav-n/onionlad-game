@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scripts/World.cs" type="Script" id=1]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://scenes/Sushi3.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scenes/Explosion.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scenes/HUD.tscn" type="PackedScene" id=9]
+[ext_resource path="res://assets/sounds/bg.ogg" type="AudioStream" id=10]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 261, 10 )
@@ -26,6 +27,10 @@ texture = ExtResource( 4 )
 centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 320, 180 )
+
+[node name="HUD" parent="." instance=ExtResource( 9 )]
+margin_right = 320.0
+margin_bottom = 180.0
 
 [node name="TileMap" parent="." instance=ExtResource( 3 )]
 tile_data = PoolIntArray( 589838, 0, 131072, 589839, 0, 3, 589840, 0, 131077, 589841, 0, 131078, 720895, 0, 131072, 655360, 0, 131077, 655361, 0, 131073, 655362, 0, 3, 655363, 0, 3, 655364, 0, 4, 655367, 0, 2, 655368, 0, 3, 655369, 0, 131077, 655370, 0, 3, 655371, 0, 131073, 655372, 0, 3, 655373, 0, 131073, 655374, 0, 131074, 655375, 0, 196611, 655376, 0, 196611, 655377, 0, 131076, 655378, 0, 3, 655379, 0, 131073, 655380, 0, 4, 786431, 0, 327682, 720896, 0, 327683, 720897, 0, 196613, 720898, 0, 196613, 720899, 0, 196609, 720900, 0, 327684, 720903, 0, 196608, 720904, 0, 196609, 720905, 0, 327683, 720906, 0, 196609, 720907, 0, 196613, 720908, 0, 196613, 720909, 0, 327683, 720910, 0, 196609, 720911, 0, 196613, 720912, 0, 327683, 720913, 0, 196613, 720914, 0, 196613, 720915, 0, 327683, 720916, 0, 196614 )
@@ -60,10 +65,13 @@ autostart = true
 [node name="Explosion" parent="Effects" instance=ExtResource( 8 )]
 visible = false
 
-[node name="HUD" parent="." instance=ExtResource( 9 )]
-
 [node name="WorldTimer" type="Timer" parent="."]
 autostart = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 10 )
+volume_db = -12.0
+autoplay = true
 
 [connection signal="shootBullet" from="Player" to="." method="_on_Player_shootBullet"]
 [connection signal="area_entered" from="DeadZone" to="." method="_on_DeadZone_area_entered"]
