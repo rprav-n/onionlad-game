@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scripts/World.cs" type="Script" id=1]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://scenes/Sushi2.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scenes/Sushi3.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scenes/Explosion.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/HUD.tscn" type="PackedScene" id=9]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 261, 10 )
@@ -59,8 +60,14 @@ autostart = true
 [node name="Explosion" parent="Effects" instance=ExtResource( 8 )]
 visible = false
 
+[node name="HUD" parent="." instance=ExtResource( 9 )]
+
+[node name="WorldTimer" type="Timer" parent="."]
+autostart = true
+
 [connection signal="shootBullet" from="Player" to="." method="_on_Player_shootBullet"]
 [connection signal="area_entered" from="DeadZone" to="." method="_on_DeadZone_area_entered"]
 [connection signal="body_entered" from="DeadZone" to="." method="_on_DeadZone_body_entered"]
 [connection signal="timeout" from="EnemySpawner/Timer" to="." method="_on_EnemySpawner_Timer_timeout"]
 [connection signal="animation_finished" from="Effects/Explosion" to="." method="_on_Explosion_animation_finished"]
+[connection signal="timeout" from="WorldTimer" to="." method="_on_WorldTimer_timeout"]

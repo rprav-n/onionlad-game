@@ -17,8 +17,12 @@ public class World : Node2D
 	private Node2D bulletContainer;
 	private Node2D enemyContainer;
 	private AnimatedSprite explosion;
+	private Timer worldTimer;
+	private HUD hud;
 	
 	// Normal Variables
+	private int score = 0;
+	private int time = 0;
 
 	public override void _Ready()
 	{
@@ -30,6 +34,12 @@ public class World : Node2D
 		explosion = GetNode<AnimatedSprite>("Effects/Explosion");
 		explosion.Visible = false;
 		explosion.Frame = 0;
+		
+		worldTimer = GetNode<Timer>("WorldTimer");
+		
+		hud = GetNode<HUD>("HUD");
+		hud.UpdateScoreLabel(0);
+		hud.UpdateTimeLabel(0);
 	}
 	
 	private void _on_DeadZone_body_entered(Node body) 
@@ -89,12 +99,20 @@ public class World : Node2D
 		explosion.GlobalPosition = enemyDiedPosition;
 		explosion.Visible = true;
 		explosion.Play("poof");
+		score += 1;
+		hud.UpdateScoreLabel(score);
 	}
 	
 	private void _on_Explosion_animation_finished() 
 	{
 		explosion.Visible = false;
 		explosion.Stop();
+	}
+	
+	private void _on_WorldTimer_timeout() 
+	{
+		time++;
+		hud.UpdateTimeLabel(time);
 	}
 
 }
