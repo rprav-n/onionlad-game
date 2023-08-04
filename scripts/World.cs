@@ -18,12 +18,14 @@ public class World : Node2D
 	private Node2D enemyContainer;
 	private AnimatedSprite explosion;
 	private HUD hud;
+	private GameOverScreen gameOverScreen;
 	
 	// Normal Variables
 	private int score = 0;
 	private int time = 0;
 	private const int totalLife = 3;
 	private int lifes = 3;
+	private bool spawnEnemy = true;
 
 	public override void _Ready()
 	{
@@ -40,6 +42,8 @@ public class World : Node2D
 		hud.UpdateScoreLabel(0);
 		hud.UpdateTimeLabel(0);
 		hud.UpdateLifesLabel(totalLife);
+		gameOverScreen = GetNode<GameOverScreen>("UILayer/GameOverScreen");
+		gameOverScreen.Visible = false;
 	}
 	
 	private void _on_DeadZone_body_entered(Node body) 
@@ -50,7 +54,10 @@ public class World : Node2D
 			lifes--;
 			if (lifes == 0) 
 			{
-				GetTree().ChangeScene("res://scenes/StartScreen.tscn");
+				gameOverScreen.Visible = true;
+				gameOverScreen.UpdateScore(score);
+				spawnEnemy = false;
+				player.QueueFree();
 			}
 			hud.UpdateLifesLabel(lifes);
 			
@@ -82,6 +89,10 @@ public class World : Node2D
 	
 	public void _on_EnemySpawner_Timer_timeout() 
 	{
+		if (!spawnEnemy) 
+		{
+			return;
+		}
 		Random rand = new Random();
 		var randomEnemyIndex = rand.Next(0, enemies.Count);
 		
