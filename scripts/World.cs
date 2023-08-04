@@ -50,7 +50,7 @@ public class World : Node2D
 			lifes--;
 			if (lifes == 0) 
 			{
-				// TODO Game over screen
+				GetTree().ChangeScene("res://scenes/StartScreen.tscn");
 			}
 			hud.UpdateLifesLabel(lifes);
 			
