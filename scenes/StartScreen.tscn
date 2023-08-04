@@ -17,6 +17,7 @@ anchor_bottom = 1.0
 script = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
+modulate = Color( 1, 1, 1, 0.509804 )
 texture = ExtResource( 1 )
 centered = false
 region_enabled = true

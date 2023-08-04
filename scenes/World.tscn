@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scripts/World.cs" type="Script" id=1]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=2]
@@ -11,6 +11,8 @@
 [ext_resource path="res://scenes/HUD.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/sounds/bg.ogg" type="AudioStream" id=10]
 [ext_resource path="res://scenes/GameOverScreen.tscn" type="PackedScene" id=11]
+[ext_resource path="res://assets/sounds/pistol.wav" type="AudioStream" id=12]
+[ext_resource path="res://assets/sounds/Explosion6.wav" type="AudioStream" id=13]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 261, 10 )
@@ -45,7 +47,10 @@ speed = 70
 jumpForce = 150
 
 [node name="DeadZone" type="Area2D" parent="."]
-position = Vector2( 160, 220 )
+position = Vector2( 160, 233 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DeadZone"]
 shape = SubResource( 1 )
@@ -78,6 +83,14 @@ autoplay = true
 
 [node name="GameOverScreen" parent="UILayer" instance=ExtResource( 11 )]
 visible = false
+
+[node name="ShootSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 12 )
+volume_db = -30.0
+
+[node name="ExplosionSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 13 )
+volume_db = -20.0
 
 [connection signal="shootBullet" from="Player" to="." method="_on_Player_shootBullet"]
 [connection signal="area_entered" from="DeadZone" to="." method="_on_DeadZone_area_entered"]

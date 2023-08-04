@@ -19,10 +19,12 @@ public class World : Node2D
 	private AnimatedSprite explosion;
 	private HUD hud;
 	private GameOverScreen gameOverScreen;
+	private AudioStreamPlayer shootSound;
+	private AudioStreamPlayer explosionSound;
 	
 	// Normal Variables
 	private int score = 0;
-	private int time = 0;
+	private int time = 30;
 	private const int totalLife = 3;
 	private int lifes = 3;
 	private bool spawnEnemy = true;
@@ -40,10 +42,13 @@ public class World : Node2D
 		
 		hud = GetNode<HUD>("HUD");
 		hud.UpdateScoreLabel(0);
-		hud.UpdateTimeLabel(0);
+		hud.UpdateTimeLabel(time);
 		hud.UpdateLifesLabel(totalLife);
 		gameOverScreen = GetNode<GameOverScreen>("UILayer/GameOverScreen");
 		gameOverScreen.Visible = false;
+		
+		shootSound = GetNode<AudioStreamPlayer>("ShootSound");
+		explosionSound = GetNode<AudioStreamPlayer>("ExplosionSound");
 	}
 	
 	private void _on_DeadZone_body_entered(Node body) 
@@ -85,6 +90,7 @@ public class World : Node2D
 		
 		var bulletDirection = (gunPosition - lookAtPosition).Normalized();
 		newBullet.direction = bulletDirection;
+		shootSound.Play();
 	}
 	
 	public void _on_EnemySpawner_Timer_timeout() 
@@ -117,7 +123,10 @@ public class World : Node2D
 		explosion.GlobalPosition = enemyDiedPosition;
 		explosion.Visible = true;
 		explosion.Play("poof");
-		score += 1;
+		score++;
+		time += 2;
+		explosionSound.Play();
+		hud.UpdateTimeLabel(time);
 		hud.UpdateScoreLabel(score);
 	}
 	
@@ -129,7 +138,15 @@ public class World : Node2D
 	
 	private void _on_WorldTimer_timeout() 
 	{
-		time++;
+		if (!gameOverScreen.Visible) 
+		{
+			time--;	
+		}
+		
+		if (time < 0) 
+		{
+			gameOverScreen.Visible = true;
+		}
 		hud.UpdateTimeLabel(time);
 	}
 
