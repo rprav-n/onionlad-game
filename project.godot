@@ -12,7 +12,10 @@ config_version=4
 
 config/name="Onion Lad"
 run/main_scene="res://scenes/StartScreen.tscn"
-config/icon="res://assets/player/icon.png"
+boot_splash/image="res://assets/player/icon.png"
+boot_splash/use_filter=false
+boot_splash/bg_color=Color( 0.929412, 0.929412, 0.929412, 1 )
+config/icon="res://assets/player/icon2.png"
 
 [display]
 
