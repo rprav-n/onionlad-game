@@ -42,9 +42,9 @@ Shoot: Mouse Left Click
 - [Grafxkid](https://grafxkid.itch.io)
 - [AlexDev](https://unityalexdev.com)
 
-## Follow Us
+## Follow Me
 
-Stay updated with the latest news and releases by following us on social media:
+Stay updated with the latest news and releases by following me on social media:
 
 - Twitter: [Twitter Handle](twitter.com/rprav_n)
 - LinkedIn: [LinkedIn Handle](linkedin.com/in/rprav-n)
